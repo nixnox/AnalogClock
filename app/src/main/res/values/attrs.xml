@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="AnalogClockView">
+        <attr name="faceDrawable" format="reference" />
+        <attr name="hourDrawable" format="reference" />
+        <attr name="minuteDrawable" format="reference" />
+        <attr name="secondDrawable" format="reference" />
+
+        <attr name="faceTint" format="color"/>
+        <attr name="hourTint" format="color"/>
+        <attr name="minuteTint" format="color"/>
+        <attr name="secondTint" format="color"/>
+
+        <attr name="hourRotation" format="float" />
+        <attr name="minuteRotation" format="float" />
+        <attr name="secondRotation" format="float" />
+    </declare-styleable>
+</resources>
