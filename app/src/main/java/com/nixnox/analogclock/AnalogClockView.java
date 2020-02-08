@@ -231,5 +231,5 @@ public class AnalogClockView extends FrameLayout {
         }
     }
 
-    enum Type {SECOND, MINUTE, HOUR}
+    public enum Type {SECOND, MINUTE, HOUR}
 }
