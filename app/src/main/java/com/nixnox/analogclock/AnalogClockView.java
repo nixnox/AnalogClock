@@ -18,14 +18,21 @@ package com.nixnox.analogclock;
 
 import android.content.Context;
 import android.content.res.TypedArray;
+import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
 import android.util.AttributeSet;
 import android.widget.FrameLayout;
+import android.widget.TextView;
 
 import androidx.appcompat.widget.AppCompatImageView;
 import androidx.core.content.ContextCompat;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
+import java.util.Locale;
+import java.util.concurrent.TimeUnit;
 
 /**
  * created by NIXNOX
@@ -39,9 +46,12 @@ public class AnalogClockView extends FrameLayout {
     private final AppCompatImageView hour;
     private final AppCompatImageView minute;
     private final AppCompatImageView second;
+    private final TextView textView;
     private final RadiusMeterView drawContainer;
     Type type;
     private float angleHolder = -1;
+    private boolean startFromSR;/* Second Round*/
+    private boolean currentTimeStarted;
 
     public AnalogClockView(Context context) {
         this(context, null);
@@ -66,6 +76,7 @@ public class AnalogClockView extends FrameLayout {
         hour = findViewById(R.id.hour_hand);
         minute = findViewById(R.id.minute_hand);
         second = findViewById(R.id.second_hand);
+        textView = findViewById(R.id.textView);
         drawContainer = findViewById(R.id.view);
         drawContainer.setWidth(second.getDrawable().getIntrinsicWidth());
 
@@ -156,13 +167,7 @@ public class AnalogClockView extends FrameLayout {
         return this;
     }
 
-    public void setCurrentTime() {
-        Calendar rightNow = Calendar.getInstance();
-        int currentHour = rightNow.get(Calendar.HOUR_OF_DAY);
-        int currentMin = rightNow.get(Calendar.MINUTE);
-        int currentSec = rightNow.get(Calendar.SECOND);
-        setTime(currentHour, currentMin, currentSec);
-    }
+
 
     @SuppressWarnings({"WeakerAccess", "UnusedReturnValue"})
     public AnalogClockView setFaceTint(int color) {
@@ -192,12 +197,31 @@ public class AnalogClockView extends FrameLayout {
         this.type = type;
     }
 
-    public void setRadiusMeter(float angle) {
+    void setRadiusMeter(float angle) {
         if (angleHolder == -1)
             angleHolder = angle;
         drawContainer.setStartEnd(angleHolder, angle);
     }
-
+    public void setTextColor(int color){
+        textView.setTextColor(color);
+    }
+    public void setTextColor(int unit,float size){
+        textView.setTextSize(unit,size);
+    }
+    public void setTextVisibility(int visibility){
+        textView.setVisibility(visibility);
+    }
+    public void setTextTypeFace(Typeface typeFace){
+        textView.setTypeface(typeFace);
+    }
+    public void setCurrentTime() {
+        currentTimeStarted=true;
+        Calendar rightNow = Calendar.getInstance();
+        int currentHour = rightNow.get(Calendar.HOUR_OF_DAY);
+        int currentMin = rightNow.get(Calendar.MINUTE);
+        int currentSec = rightNow.get(Calendar.SECOND);
+        setTime(currentHour, currentMin, currentSec);
+    }
     public void setStartEndRadius(long startMills, long endMills, Type type) {
 
 
@@ -230,6 +254,33 @@ public class AnalogClockView extends FrameLayout {
                 break;
         }
     }
+    public void setStartFromEventTime(String dateTime){
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.US);
+        Date convertedDate;
+        Calendar cal = Calendar.getInstance();
+        Date today = cal.getTime();
+        try {
+            convertedDate = dateFormat.parse(dateTime.replace("T"," "));
+        } catch (ParseException e) {
+            e.printStackTrace();
+            return;
+        }
+        long diff = today.getTime() - convertedDate.getTime() ;
+        int seconds = (int) (TimeUnit.MILLISECONDS.toSeconds(diff) - TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(diff)));
+        int minutes = (int) (TimeUnit.MILLISECONDS.toMinutes(diff) - TimeUnit.HOURS.toMinutes(TimeUnit.MILLISECONDS.toHours(diff)));
+        int hours = (int) (TimeUnit.MILLISECONDS.toHours(diff) - TimeUnit.DAYS.toHours(TimeUnit.MILLISECONDS.toDays(diff)));
+        int days = (int) TimeUnit.MILLISECONDS.toDays(diff);
 
+        if (days<=1) {
+            if (convertedDate.before(today))
+                startFromSR = true;
+            setStartEndRadius(convertedDate.getTime(), System.currentTimeMillis(), AnalogClockView.Type.HOUR);
+        }else {
+            String string = "%d روز %d ساعت %d دقیقه %d ثانیه";
+            textView.setText(String.format(Locale.US,string,days,hours,minutes,seconds));
+        }
+        if (!currentTimeStarted)
+            setCurrentTime();
+    }
     public enum Type {SECOND, MINUTE, HOUR}
 }

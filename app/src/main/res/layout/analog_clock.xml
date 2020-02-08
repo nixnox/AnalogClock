@@ -1,42 +1,61 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
     android:clipChildren="false"
-    android:clipToPadding="true">
-
-    <androidx.appcompat.widget.AppCompatImageView
-        android:id="@+id/background"
-        android:layout_width="300dp"
-        android:layout_height="300dp"
-        android:layout_centerInParent="true"
-        app:srcCompat="@drawable/clock_background" />
-
-    <com.nixnox.analogclock.RadiusMeterView
-        android:id="@+id/view"
+    android:clipToPadding="true"
+    android:gravity="center"
+    android:orientation="vertical">
+    <TextView
+        android:id="@+id/textView"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:rotation="270" />
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:textSize="20sp"
+        android:layout_marginStart="36dp"
+        android:layout_marginEnd="36dp"
+        tools:text="time"/>
+    <RelativeLayout
+        android:layout_marginTop="16dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
 
-    <androidx.appcompat.widget.AppCompatImageView
-        android:id="@+id/hour_hand"
-        android:layout_width="150dp"
-        android:layout_height="150dp"
-        android:layout_centerInParent="true"
-        app:srcCompat="@drawable/clock_hour" />
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/background"
+            android:layout_width="300dp"
+            android:layout_height="300dp"
+            android:layout_centerInParent="true"
+            app:srcCompat="@drawable/clock_background" />
 
-    <androidx.appcompat.widget.AppCompatImageView
-        android:id="@+id/minute_hand"
-        android:layout_width="130dp"
-        android:layout_height="130dp"
-        android:layout_centerInParent="true"
-        app:srcCompat="@drawable/clock_min" />
+        <com.nixnox.analogclock.RadiusMeterView
+            android:id="@+id/view"
+            android:layout_width="140dp"
+            android:layout_height="140dp"
+            android:layout_centerInParent="true"
+            android:rotation="270" />
 
-    <androidx.appcompat.widget.AppCompatImageView
-        android:id="@+id/second_hand"
-        android:layout_width="140dp"
-        android:layout_height="140dp"
-        android:layout_centerInParent="true"
-        app:srcCompat="@drawable/clock_second" />
-</RelativeLayout>
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/hour_hand"
+            android:layout_width="150dp"
+            android:layout_height="150dp"
+            android:layout_centerInParent="true"
+            app:srcCompat="@drawable/clock_hour" />
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/minute_hand"
+            android:layout_width="130dp"
+            android:layout_height="130dp"
+            android:layout_centerInParent="true"
+            app:srcCompat="@drawable/clock_min" />
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/second_hand"
+            android:layout_width="140dp"
+            android:layout_height="140dp"
+            android:layout_centerInParent="true"
+            app:srcCompat="@drawable/clock_second" />
+    </RelativeLayout>
+
+</LinearLayout>
