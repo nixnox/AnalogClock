@@ -22,7 +22,6 @@ public class RadiusMeterView extends View {
     Context context;
     RectF oval;
     private Paint circlePaint;
-    private Paint circleStrokePaint;
     private int radiusMeterColor = R.color.colorRadiusMeter;
 
     public RadiusMeterView(Context context, AttributeSet attrs) {
@@ -61,10 +60,7 @@ public class RadiusMeterView extends View {
         circlePaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         circlePaint.setStyle(Paint.Style.FILL);
         circlePaint.setColor(ContextCompat.getColor(context, radiusMeterColor));
-        circleStrokePaint = new Paint(Paint.ANTI_ALIAS_FLAG);
-        circleStrokePaint.setStyle(Paint.Style.STROKE);
-        circleStrokePaint.setStrokeWidth(2);
-        circleStrokePaint.setColor(ContextCompat.getColor(context, radiusMeterColor));
+
     }
 
     public void setStartEnd(float start, float end) {
@@ -81,10 +77,11 @@ public class RadiusMeterView extends View {
 
     public void setWidth(float width) {
         this.outwidth = width;
+        invalidate();
     }
 
     public void setRadiusMeterColor(@ColorInt int radiusMeterColor) {
         this.radiusMeterColor = radiusMeterColor;
+        invalidate();
     }
-
 }

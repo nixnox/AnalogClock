@@ -50,6 +50,7 @@ public class AnalogClockView extends FrameLayout {
     private final RadiusMeterView drawContainer;
     Type type;
     private float angleHolder = -1;
+    private int viewWidth,viewHeight;
     private boolean startFromSR;/* Second Round*/
     private boolean currentTimeStarted;
 
@@ -78,7 +79,7 @@ public class AnalogClockView extends FrameLayout {
         second = findViewById(R.id.second_hand);
         textView = findViewById(R.id.textView);
         drawContainer = findViewById(R.id.view);
-        drawContainer.setWidth(second.getDrawable().getIntrinsicWidth());
+
 
         TypedArray typedArray = context.getTheme().obtainStyledAttributes(
                 attrs, R.styleable.AnalogClockView, defStyleAttr, defStyleRes);
@@ -106,7 +107,15 @@ public class AnalogClockView extends FrameLayout {
         rotateMinuteHand(typedArray.getFloat(R.styleable.AnalogClockView_minuteRotation, 0));
         rotateSecondHand(typedArray.getFloat(R.styleable.AnalogClockView_secondRotation, 0));
     }
+    @Override
+    protected void onSizeChanged(int xNew, int yNew, int xOld, int yOld){
+        super.onSizeChanged(xNew, yNew, xOld, yOld);
 
+        viewHeight = yNew;
+        viewWidth = xNew;
+        int width = xNew>670?670:xNew;
+        drawContainer.setWidth((float) ((float) width*1.5));
+    }
     @SuppressWarnings("WeakerAccess")
     public AnalogClockView setFaceDrawable(Drawable drawable) {
         background.setImageDrawable(drawable);
@@ -205,7 +214,7 @@ public class AnalogClockView extends FrameLayout {
     public void setTextColor(int color){
         textView.setTextColor(color);
     }
-    public void setTextColor(int unit,float size){
+    public void setTextSize(int unit,float size){
         textView.setTextSize(unit,size);
     }
     public void setTextVisibility(int visibility){
@@ -213,6 +222,9 @@ public class AnalogClockView extends FrameLayout {
     }
     public void setTextTypeFace(Typeface typeFace){
         textView.setTypeface(typeFace);
+    }
+    public void setRadiusMeterColor(int color){
+        drawContainer.setRadiusMeterColor(color);
     }
     public void setCurrentTime() {
         currentTimeStarted=true;
@@ -240,7 +252,11 @@ public class AnalogClockView extends FrameLayout {
             case HOUR:
                 float startHR = (float) 0.0000083 * (startHour * HOURS + startMin * MINUTES + startSec * SECONDS);
                 float endHR = (float) 0.0000083 * (endHour * HOURS + endMin * MINUTES + endSec * SECONDS);
-                drawContainer.setStartEnd(startHR, endHR);
+                if (startFromSR) {
+                    drawContainer.setStartEnd(0,360);
+                    drawContainer.setStartEndSecondRound(startHR, endHR);
+                }else    drawContainer.setStartEnd(startHR, endHR);
+
                 break;
             case MINUTE:
                 float startMR = (float) 0.0001 * (startMin * MINUTES + startSec * SECONDS);
@@ -280,7 +296,9 @@ public class AnalogClockView extends FrameLayout {
             textView.setText(String.format(Locale.US,string,days,hours,minutes,seconds));
         }
         if (!currentTimeStarted)
+            currentTimeStarted=true;
             setCurrentTime();
+
     }
     public enum Type {SECOND, MINUTE, HOUR}
 }
