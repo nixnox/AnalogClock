@@ -49,7 +49,7 @@ public class RadiusMeterView extends View {
     public void initDraw() {
         float width = (float) getWidth();
         float height = (float) getHeight();
-        float radius = outwidth == -1 ? width > height ? height / 6 : width / 6 : outwidth + 20;
+        float radius = outwidth == -1 ? width > height ? height / 6 : width / 6 : outwidth / 6;
         float center_x = width / 2, center_y = height / 2;
         oval = new RectF();
         oval.set(center_x - radius,
