@@ -40,8 +40,10 @@ public class RadiusMeterView extends View {
 
         canvas.drawArc(oval, start, end, true, circlePaint);
         //    canvas.drawArc(oval, start, end, true, circleStrokePaint);
-        if (startSR != -1 && endSR != -1)
+        if (startSR != -1 && endSR != -1) {
+            endSR = startSR == endSR ? endSR = 0 : ((startSR < endSR) ? (endSR - startSR) : ((360 + endSR) - startSR));
             canvas.drawArc(oval, startSR, endSR, true, circlePaint);
+        }
     }
 
     public void initDraw() {
