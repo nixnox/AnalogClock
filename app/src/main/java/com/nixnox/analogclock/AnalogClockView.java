@@ -288,7 +288,7 @@ public class AnalogClockView extends FrameLayout {
         int days = (int) TimeUnit.MILLISECONDS.toDays(diff);
 
         if (days<=1) {
-            if (convertedDate.before(today))
+            if (convertedDate.before(today)&&days==1)
                 startFromSR = true;
             setStartEndRadius(convertedDate.getTime(), System.currentTimeMillis(), AnalogClockView.Type.HOUR);
         }else {
